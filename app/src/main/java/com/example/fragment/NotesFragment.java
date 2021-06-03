@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
@@ -18,10 +19,11 @@ public class NotesFragment extends Fragment {
     }
 
     private DossierEntity dossier = null;
-
     private EditText titleN;
     private EditText descriptionN;
     private EditText dateN;
+    private Button saveButton;
+
 
     //статический метод, который возвращает NotesFragment
     //при его помощи мы будем передавать(ложить) данные во фрагмент
@@ -40,15 +42,13 @@ public class NotesFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (!(context instanceof Controller)) {
+            throw new RuntimeException("Activity must implement NotesController");
+        }
         //не забываем проверять на null
         if (getArguments() != null) {
             dossier = getArguments().getParcelable(DOSSIER_ARGS_KEY);
         }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     //вьюшка создалась и раздулась
@@ -61,6 +61,17 @@ public class NotesFragment extends Fragment {
         descriptionN = view.findViewById(R.id.note_description);
         dateN = view.findViewById(R.id.date_of_creation);
 
+        saveButton = view.findViewById(R.id.save_button);
+
+        saveButton.setOnClickListener(v -> {
+            Controller controller = (Controller) getActivity();
+            controller.saveResult(new DossierEntity(
+                    titleN.getText().toString(),
+                    descriptionN.getText().toString(),
+                    dateN.getText().toString()
+            ));
+        });
+
         return view;
     }
 
@@ -72,6 +83,11 @@ public class NotesFragment extends Fragment {
         titleN.setText(dossier.title);
         descriptionN.setText(dossier.description);
         dateN.setText(dossier.date);
+    }
 
+    public interface Controller {
+        //с помощью этого интерфейса будем предавать данные из
+        //фрагмента в майнактивити
+        void saveResult(DossierEntity dossier);
     }
 }
