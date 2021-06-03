@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.show_fragment_button).setOnClickListener(v -> {
-            NotesFragment notesFragment = new NotesFragment(myDossier);
+            NotesFragment notesFragment = NotesFragment.newInstance(myDossier);
             //показываем фрагмент через getSupportFragmentManager()
             getSupportFragmentManager()
                     .beginTransaction()

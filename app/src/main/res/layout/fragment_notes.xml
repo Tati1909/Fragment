@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:background="#2196F3"
     android:orientation="vertical"
-    android:padding="@dimen/padding_default">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="@dimen/padding_default"
+    tools:showIn=".MainActivity">
 
     <EditText
         android:id="@+id/note_title"
