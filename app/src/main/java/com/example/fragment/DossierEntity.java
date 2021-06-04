@@ -43,4 +43,9 @@ public class DossierEntity implements Parcelable {
         dest.writeString(description);
         dest.writeString(date);
     }
+
+    @Override
+    public String toString() {
+        return title + " " + description + " " + date;
+    }
 }

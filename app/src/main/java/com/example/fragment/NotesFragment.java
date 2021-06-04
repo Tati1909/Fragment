@@ -24,7 +24,6 @@ public class NotesFragment extends Fragment {
     private EditText dateN;
     private Button saveButton;
 
-
     //статический метод, который возвращает NotesFragment
     //при его помощи мы будем передавать(ложить) данные во фрагмент
     public static NotesFragment newInstance(DossierEntity dossierEntity) {

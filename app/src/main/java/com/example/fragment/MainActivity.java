@@ -1,39 +1,42 @@
 package com.example.fragment;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements NotesFragment.Controller {
-    public TextView resultTextView;
-    private DossierEntity myDossier = new DossierEntity("День рождения",
-            "брат", "12.06");
-    private NotesFragment notesFragment = NotesFragment.newInstance(myDossier);
+public class MainActivity extends AppCompatActivity implements NotesFragment.Controller, NotesListFragment.Controller {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.show_fragment_button).setOnClickListener(v -> {
-            //показываем фрагмент через getSupportFragmentManager()
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    //добавляем во FrameLayout из activity_main.xml наш фрагмент notesFragment
-                    .add(R.id.fragment_container, notesFragment)
-                    .commit();
-        });
+        getSupportFragmentManager().
+                beginTransaction().
+                add(R.id.container, new NotesListFragment()).
+                commit();
     }
 
     //метод интерфйса для передачи данных
     //из фрагмента в resultTextView (майнактивити)
     @Override
     public void saveResult(DossierEntity dossier) {
-        myDossier = dossier;
-        resultTextView.setText(String.format("%s %s %s",
-                dossier.title,
-                dossier.description,
-                dossier.date));
+        //todo
+    }
+
+    //метод интерфейса
+    @Override
+    public void openNotesScreen(DossierEntity dossier) {
+        //если ориентация горизонтальная(boolean),то досье будем ложить в detail_container
+        boolean isLandScape = getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE;
+        getSupportFragmentManager().
+                beginTransaction().
+                add(isLandScape ? R.id.detail_container : R.id.container, NotesFragment.newInstance(dossier)).
+                //при нажатии назад, приложение переходит на первый фрагмент
+                        addToBackStack(null).
+                commit();
+
     }
 }
