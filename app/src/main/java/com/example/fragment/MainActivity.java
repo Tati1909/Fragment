@@ -5,26 +5,46 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class MainActivity extends AppCompatActivity implements NotesFragment.Controller, NotesListFragment.Controller {
+    private FloatingActionButton buttonCreateNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //заменяем ActionBar на ToolBar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //добавила кнопку плюс для создания новой заметки
+        //но кнопка не отображается(всплывающее меню)
+        buttonCreateNote = findViewById(R.id.create_a_note);
+        buttonCreateNote.setOnClickListener(v -> showPopup());
 
         getSupportFragmentManager().
                 beginTransaction().
                 add(R.id.container, new NotesListFragment()).
                 commit();
+    }
+
+    private void showPopup() {
+        PopupMenu popupMenu = new PopupMenu(this, buttonCreateNote);
+        popupMenu.inflate(R.menu.main_menu);
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            onOptionsItemSelected(menuItem);
+            return false;
+        });
+        popupMenu.show();
     }
 
     //определяем меню приложения
