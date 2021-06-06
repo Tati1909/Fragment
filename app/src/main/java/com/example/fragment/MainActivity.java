@@ -27,9 +27,9 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.Con
         setSupportActionBar(toolbar);
 
         //добавила кнопку плюс для создания новой заметки
-        //но кнопка не отображается(всплывающее меню)
         buttonCreateNote = findViewById(R.id.create_a_note);
-        buttonCreateNote.setOnClickListener(v -> showPopup());
+        buttonCreateNote.setOnClickListener(v ->
+                Toast.makeText(this, "Создаем папку", Toast.LENGTH_LONG).show());
 
         getSupportFragmentManager().
                 beginTransaction().
@@ -51,8 +51,7 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.Con
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        //нужно как-то впихнуть в бар кнопку с разворотм папок
-        MenuItem folders = menu.findItem(R.id.folders);
+
         return true;
     }
 
