@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.Con
         popupMenu.show();
     }
 
-    //определяем меню приложения
+    //определяем верхнее меню приложения
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);

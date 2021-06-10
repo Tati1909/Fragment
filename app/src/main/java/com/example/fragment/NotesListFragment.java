@@ -12,9 +12,9 @@ import androidx.fragment.app.Fragment;
 
 public class NotesListFragment extends Fragment {
     private final DossierEntity dossier1 = new DossierEntity("юбилей", "мама", "15.03");
-    private final DossierEntity dossier2 = new DossierEntity("ДР", "пап", "17.04");
-    private final DossierEntity dossier3 = new DossierEntity("ДР", "брат", "21.03");
-    private final DossierEntity dossier4 = new DossierEntity("юбилей", "доча", "6.08");
+    private final DossierEntity dossier2 = new DossierEntity("ДР", "пап", "02.10");
+    private final DossierEntity dossier3 = new DossierEntity("ДР", "брат", "01.06");
+    private final DossierEntity dossier4 = new DossierEntity("юбилей", "доча", "28.04");
     private final DossierEntity dossier5 = new DossierEntity("ДР", "мурзик", "2.08");
     private LinearLayout linearLayout;
 
