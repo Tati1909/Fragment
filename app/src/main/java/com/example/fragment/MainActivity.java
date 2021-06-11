@@ -26,14 +26,14 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.Con
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //добавила кнопку плюс для создания новой заметки
+       /* //добавила кнопку плюс для создания новой заметки
         buttonCreateNote = findViewById(R.id.create_a_note);
         buttonCreateNote.setOnClickListener(v ->
                 Toast.makeText(this, "Создаем папку", Toast.LENGTH_LONG).show());
-
+        */
         getSupportFragmentManager().
                 beginTransaction().
-                add(R.id.list_container, new NotesListFragment()).
+                add(R.id.container, new NotesListFragment()).
                 commit();
     }
 
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.Con
                 Configuration.ORIENTATION_LANDSCAPE;
         getSupportFragmentManager().
                 beginTransaction().
-                add(isLandScape ? R.id.detail_container_land : R.id.list_container, NotesFragment.newInstance(dossier)).
+                add(isLandScape ? R.id.detail_container_land : R.id.container, NotesFragment.newInstance(dossier)).
                 //при нажатии назад, приложение переходит на первый фрагмент
                         addToBackStack(null).
                 commit();
