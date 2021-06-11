@@ -2,4 +2,5 @@
 <resources>
     <dimen name="padding_default">16dp</dimen>
     <dimen name="text_size_double">32sp</dimen>
+    <dimen name="size_text_default">24sp</dimen>
 </resources>
