@@ -1,21 +1,16 @@
 package com.example.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-public class MainActivity extends AppCompatActivity implements NotesFragment.Controller, NotesListFragment.Controller {
-    private FloatingActionButton buttonCreateNote;
+public class MainActivity extends AppCompatActivity implements EditNoteFragment.Controller, NotesListFragment.Contract {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,19 +20,27 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.Con
         //заменяем ActionBar на ToolBar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        showNotesListFragment();
+    }
 
-       /* //добавила кнопку плюс для создания новой заметки
-        buttonCreateNote = findViewById(R.id.create_a_note);
-        buttonCreateNote.setOnClickListener(v ->
-                Toast.makeText(this, "Создаем папку", Toast.LENGTH_LONG).show());
-        */
+    //добавляем наш фрагмент в контейнер
+    private void showNotesListFragment() {
         getSupportFragmentManager().
                 beginTransaction().
                 add(R.id.container, new NotesListFragment()).
                 commit();
     }
 
-    private void showPopup() {
+    private void showEditNoteFragment() {
+        getSupportFragmentManager().
+                beginTransaction().
+                addToBackStack(null).
+                add(R.id.container, new EditNoteFragment()).
+                commit();
+    }
+
+
+   /* private void showPopup() {
         PopupMenu popupMenu = new PopupMenu(this, buttonCreateNote);
         popupMenu.inflate(R.menu.main_menu);
         popupMenu.setOnMenuItemClickListener(menuItem -> {
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.Con
             return false;
         });
         popupMenu.show();
-    }
+    } */
 
     //определяем верхнее меню приложения
     @Override
@@ -80,18 +83,23 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.Con
         //todo
     }
 
-    //метод интерфейса
+    //метод интерфейса должен создать новую детальную заметку
+    // с возможностью редактирования
     @Override
-    public void openNotesScreen(NotesEntity dossier) {
+    public void createNewNote() {
+        showEditNoteFragment();
+        /*
         //если ориентация горизонтальная(boolean),то досье будем ложить в detail_container_land
         boolean isLandScape = getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_LANDSCAPE;
         getSupportFragmentManager().
                 beginTransaction().
-                add(isLandScape ? R.id.detail_container_land : R.id.container, NotesFragment.newInstance(dossier)).
                 //при нажатии назад, приложение переходит на первый фрагмент
                         addToBackStack(null).
+                //replace вместо add, чтобы фрагменты не накладывались друг на друга
+                        replace(isLandScape ? R.id.detail_container_land : R.id.container,
+                        EditNoteFragment.newInstance(dossier)).
                 commit();
-
+*/
     }
 }

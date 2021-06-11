@@ -10,14 +10,14 @@ import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 
-public class NotesFragment extends Fragment {
+public class EditNoteFragment extends Fragment {
     //создаем ключ для передачи данных во фрагмент(используем Parcelable)
     public static final String DOSSIER_ARGS_KEY = "DOSSIER_ARGS_KEY";
 
     private NotesEntity dossier = null;
 
     //конструктор должен быть без аргуметов, т к программа упадет после поворота экрана
-    public NotesFragment() {
+    public EditNoteFragment() {
 
     }
 
@@ -28,14 +28,14 @@ public class NotesFragment extends Fragment {
 
     //статический метод, который возвращает NotesFragment
     //при его помощи мы будем передавать(ложить) данные во фрагмент
-    public static NotesFragment newInstance(NotesEntity notesEntity) {
-        NotesFragment notesFragment = new NotesFragment();
+    public static EditNoteFragment newInstance(NotesEntity notesEntity) {
+        EditNoteFragment editNoteFragment = new EditNoteFragment();
         Bundle args = new Bundle();
 
         args.putParcelable(DOSSIER_ARGS_KEY, notesEntity);
         //передаем аргументы во фрагмент
-        notesFragment.setArguments(args);
-        return notesFragment;
+        editNoteFragment.setArguments(args);
+        return editNoteFragment;
     }
 
     //первый метод жизненнного цикла фрагмента
@@ -55,7 +55,7 @@ public class NotesFragment extends Fragment {
     //вьюшка создалась и раздулась
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_notes, null);
+        View view = inflater.inflate(R.layout.fragment_notes_detail, null);
         //в root контейнер не ложим!! оставляем null
 
         //инициализация вьюшек EditText для передачи во фрагмент при нажатии на кнопку
