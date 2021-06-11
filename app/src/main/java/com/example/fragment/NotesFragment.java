@@ -14,11 +14,13 @@ public class NotesFragment extends Fragment {
     //создаем ключ для передачи данных во фрагмент(используем Parcelable)
     public static final String DOSSIER_ARGS_KEY = "DOSSIER_ARGS_KEY";
 
+    private NotesEntity dossier = null;
+
+    //конструктор должен быть без аргуметов, т к программа упадет после поворота экрана
     public NotesFragment() {
 
     }
 
-    private DossierEntity dossier = null;
     private EditText titleN;
     private EditText descriptionN;
     private EditText dateN;
@@ -26,11 +28,11 @@ public class NotesFragment extends Fragment {
 
     //статический метод, который возвращает NotesFragment
     //при его помощи мы будем передавать(ложить) данные во фрагмент
-    public static NotesFragment newInstance(DossierEntity dossierEntity) {
+    public static NotesFragment newInstance(NotesEntity notesEntity) {
         NotesFragment notesFragment = new NotesFragment();
         Bundle args = new Bundle();
 
-        args.putParcelable(DOSSIER_ARGS_KEY, dossierEntity);
+        args.putParcelable(DOSSIER_ARGS_KEY, notesEntity);
         //передаем аргументы во фрагмент
         notesFragment.setArguments(args);
         return notesFragment;
@@ -54,6 +56,7 @@ public class NotesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notes, null);
+        //в root контейнер не ложим!! оставляем null
 
         //инициализация вьюшек EditText для передачи во фрагмент при нажатии на кнопку
         titleN = view.findViewById(R.id.note_title);
@@ -64,7 +67,7 @@ public class NotesFragment extends Fragment {
 
         saveButton.setOnClickListener(v -> {
             Controller controller = (Controller) getActivity();
-            controller.saveResult(new DossierEntity(
+            controller.saveResult(new NotesEntity(
                     titleN.getText().toString(),
                     descriptionN.getText().toString(),
                     dateN.getText().toString()
@@ -87,6 +90,6 @@ public class NotesFragment extends Fragment {
     public interface Controller {
         //с помощью этого интерфейса будем предавать данные из
         //фрагмента в майнактивити
-        void saveResult(DossierEntity dossier);
+        void saveResult(NotesEntity dossier);
     }
 }
