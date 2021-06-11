@@ -11,11 +11,13 @@ import android.widget.LinearLayout;
 import androidx.fragment.app.Fragment;
 
 public class NotesListFragment extends Fragment {
+
     private final NotesEntity dossier1 = new NotesEntity("юбилей", "мама", "15.03");
     private final NotesEntity dossier2 = new NotesEntity("ДР", "пап", "17.04");
     private final NotesEntity dossier3 = new NotesEntity("годовщина", "брат", "21.03");
     private final NotesEntity dossier4 = new NotesEntity("юбилей", "доча", "6.08");
     private final NotesEntity dossier5 = new NotesEntity("ДР", "мурзик", "2.08");
+
     private LinearLayout linearLayout;
 
     private void addNotesToList(NotesEntity notesEntity) {
@@ -35,10 +37,10 @@ public class NotesListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_notes_list, null);
     }
 
-    //делаем проверку, что активити имплементирует интерфейс Controller
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        //делаем проверку, что активити имплементирует интерфейс Controller
         if (!(context instanceof Controller)) {
             throw new RuntimeException("Activity must implement NotesListController");
         }
