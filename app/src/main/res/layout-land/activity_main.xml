@@ -9,13 +9,13 @@
     tools:context=".MainActivity">
 
     <FrameLayout
-        android:id="@+id/container"
+        android:id="@+id/list_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />
 
     <FrameLayout
-        android:id="@+id/detail_container"
+        android:id="@+id/detail_container_land"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />
