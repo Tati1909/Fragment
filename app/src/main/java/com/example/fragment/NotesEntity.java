@@ -2,10 +2,15 @@ package com.example.fragment;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.util.Calendar;
+import java.util.UUID;
+
 public class NotesEntity implements Parcelable {
-    public String title;
-    public String description;
-    public String date;
+    public final String id;
+    public final String title;
+    public final String description;
+    public final long creationDate;
 
     public static final Creator<NotesEntity> CREATOR = new Creator<NotesEntity>() {
         @Override
@@ -19,16 +24,22 @@ public class NotesEntity implements Parcelable {
         }
     };
 
-    public NotesEntity(String title, String description, String date) {
+    public NotesEntity(String id, String title, String description, long creationDate) {
+        this.id = id;
         this.title = title;
         this.description = description;
-        this.date = date;
+        this.creationDate = creationDate;
     }
 
     protected NotesEntity(Parcel in) {
+        id = in.readString();
         title = in.readString();
         description = in.readString();
-        date = in.readString();
+        creationDate = in.readLong();
+    }
+
+    public static String generateNewId() {
+        return UUID.randomUUID().toString();
     }
 
     @Override
@@ -36,15 +47,20 @@ public class NotesEntity implements Parcelable {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
-        dest.writeString(description);
-        dest.writeString(date);
+    public static long getCurrentDate() {
+        //возвращает текущее время в милисекундах
+        return Calendar.getInstance().getTimeInMillis();
     }
 
     @Override
     public String toString() {
-        return title + " " + description + " " + date;
+        return title + " " + description + " " + creationDate;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeLong(creationDate);
     }
 }

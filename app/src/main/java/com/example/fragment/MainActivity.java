@@ -5,17 +5,15 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-public class MainActivity extends AppCompatActivity implements NotesFragment.Controller, NotesListFragment.Controller {
-    private FloatingActionButton buttonCreateNote;
+public class MainActivity extends AppCompatActivity implements EditNoteFragment.Contract, NotesListFragment.Contract {
+    private static final String NOTES_LIST_FRAGMENT_TAG = "NOTES_LIST_FRAGMENT_TAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,19 +23,35 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.Con
         //заменяем ActionBar на ToolBar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        showNotesListFragment();
+    }
 
-       /* //добавила кнопку плюс для создания новой заметки
-        buttonCreateNote = findViewById(R.id.create_a_note);
-        buttonCreateNote.setOnClickListener(v ->
-                Toast.makeText(this, "Создаем папку", Toast.LENGTH_LONG).show());
-        */
+    //добавляем наш фрагмент в контейнер
+    private void showNotesListFragment() {
         getSupportFragmentManager().
                 beginTransaction().
-                add(R.id.container, new NotesListFragment()).
+                add(R.id.container, new NotesListFragment(), NOTES_LIST_FRAGMENT_TAG).
                 commit();
     }
 
-    private void showPopup() {
+    private void showEditNoteFragment() {
+        showEditNoteFragment(null);
+    }
+
+    //Nullable может быть нулем
+    private void showEditNoteFragment(@Nullable NotesEntity note) {
+        //если ориентация горизонтальная(boolean),то досье будем ложить в detail_container_land
+        boolean isLandScape = getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE;
+        getSupportFragmentManager().
+                beginTransaction().
+                addToBackStack(null).
+                replace(isLandScape ? R.id.detail_container_land : R.id.container, EditNoteFragment.newInstance(note)).
+                commit();
+    }
+
+
+   /* private void showPopup() {
         PopupMenu popupMenu = new PopupMenu(this, buttonCreateNote);
         popupMenu.inflate(R.menu.main_menu);
         popupMenu.setOnMenuItemClickListener(menuItem -> {
@@ -45,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.Con
             return false;
         });
         popupMenu.show();
-    }
+    } */
 
     //определяем верхнее меню приложения
     @Override
@@ -76,22 +90,24 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.Con
     //метод интерфйса для передачи данных
     //из фрагмента в resultTextView (майнактивити)
     @Override
-    public void saveResult(NotesEntity dossier) {
-        //todo
+    public void saveNote(NotesEntity note) {
+        getSupportFragmentManager().popBackStack();
+        NotesListFragment notesListFragment = (NotesListFragment) getSupportFragmentManager().findFragmentByTag(NOTES_LIST_FRAGMENT_TAG);
+        notesListFragment.addNote(note);
+    }
+
+    //метод интерфейса должен создать новую детальную заметку
+    // с возможностью редактирования
+    @Override
+    public void createNewNote() {
+        showEditNoteFragment();
     }
 
     //метод интерфейса
+    // когда мы нажимаем на заметку в списке, то можем ее отредактировать
     @Override
-    public void openNotesScreen(NotesEntity dossier) {
-        //если ориентация горизонтальная(boolean),то досье будем ложить в detail_container_land
-        boolean isLandScape = getResources().getConfiguration().orientation ==
-                Configuration.ORIENTATION_LANDSCAPE;
-        getSupportFragmentManager().
-                beginTransaction().
-                add(isLandScape ? R.id.detail_container_land : R.id.container, NotesFragment.newInstance(dossier)).
-                //при нажатии назад, приложение переходит на первый фрагмент
-                        addToBackStack(null).
-                commit();
+    public void editNote(NotesEntity note) {
+        showEditNoteFragment(note);
 
     }
 }
