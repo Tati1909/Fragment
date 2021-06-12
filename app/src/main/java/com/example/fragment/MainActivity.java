@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -33,10 +34,15 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
     }
 
     private void showEditNoteFragment() {
+        showEditNoteFragment(null);
+    }
+
+    //Nullable может быть нулем
+    private void showEditNoteFragment(@Nullable NotesEntity note) {
         getSupportFragmentManager().
                 beginTransaction().
                 addToBackStack(null).
-                replace(R.id.container, new EditNoteFragment()).
+                add(R.id.container, EditNoteFragment.newInstance(note)).
                 commit();
     }
 
@@ -104,5 +110,13 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
                         EditNoteFragment.newInstance(dossier)).
                 commit();
 */
+    }
+
+    //метод интерфейса
+    // когда мы нажимаем на заметку в списке, то можем ее отредактировать
+    @Override
+    public void editNote(NotesEntity note) {
+        showEditNoteFragment(note);
+
     }
 }

@@ -8,30 +8,26 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class EditNoteFragment extends Fragment {
     //создаем ключ для передачи данных во фрагмент(используем Parcelable)
-    public static final String DOSSIER_ARGS_KEY = "DOSSIER_ARGS_KEY";
+    public static final String NOTE_EXTRA_KEY = "NOTE_EXTRA_KEY";
 
-    private NotesEntity dossier = null;
+    @Nullable
+    private NotesEntity note = null;
+
     private EditText titleN;
     private EditText descriptionN;
-    private EditText dateN;
     private Button saveButton;
 
-    //конструктор должен быть без аргуметов, т к программа упадет после поворота экрана
-    public EditNoteFragment() {
-
-    }
-
-    //статический метод, который возвращает NotesFragment
+    //статический метод, который возвращает EditNotesFragment
     //при его помощи мы будем передавать(ложить) данные во фрагмент
-    public static EditNoteFragment newInstance(NotesEntity notesEntity) {
+    public static EditNoteFragment newInstance(@Nullable NotesEntity note) {
         EditNoteFragment editNoteFragment = new EditNoteFragment();
         Bundle args = new Bundle();
-
-        args.putParcelable(DOSSIER_ARGS_KEY, notesEntity);
+        args.putParcelable(NOTE_EXTRA_KEY, note);
         //передаем аргументы во фрагмент
         editNoteFragment.setArguments(args);
         return editNoteFragment;
@@ -47,7 +43,7 @@ public class EditNoteFragment extends Fragment {
         }
         //не забываем проверять на null
         if (getArguments() != null) {
-            dossier = getArguments().getParcelable(DOSSIER_ARGS_KEY);
+            note = getArguments().getParcelable(NOTE_EXTRA_KEY);
         }
     }
 
@@ -59,7 +55,6 @@ public class EditNoteFragment extends Fragment {
         //инициализация вьюшек EditText для передачи во фрагмент при нажатии на кнопку
         titleN = view.findViewById(R.id.note_title);
         descriptionN = view.findViewById(R.id.note_description);
-        dateN = view.findViewById(R.id.date_of_creation);
         saveButton = view.findViewById(R.id.save_button);
 
         return view;
@@ -68,23 +63,32 @@ public class EditNoteFragment extends Fragment {
     //вызывается, когда вьюшки уже были созданы
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        note = getArguments().getParcelable(NOTE_EXTRA_KEY);
+        getActivity().setTitle(note == null ? R.string.create_note_title : R.string.edit_note_title);
+
+        fillNote(note);
 
         saveButton.setOnClickListener(v -> {
             getContract().saveNote(gatherNote());
         });
-
-        /* //передаем данные заметок во фрагмент
-        titleN.setText(dossier.title);
-        descriptionN.setText(dossier.description);
-        dateN.setText(dossier.date);  */
     }
 
-    private NotesEntity gatherNote() {
+    private void fillNote(NotesEntity note) {
+        if (note == null) return;
+        //передаем данные заметок во фрагмент
+        titleN.setText(note.title);
+        descriptionN.setText(note.description);
 
+    }
+
+    //когда мы редактируем старую заметку
+    //то оставляем id и старую дату создания заметки
+    private NotesEntity gatherNote() {
         return new NotesEntity(
+                note == null ? NotesEntity.generateNewId() : note.id,
                 titleN.getText().toString(),
                 descriptionN.getText().toString(),
-                NotesEntity.getCurrentDate()
+                note == null ? NotesEntity.getCurrentDate() : note.creationDate
         );
     }
 

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
@@ -16,26 +17,8 @@ import java.util.List;
 public class NotesListFragment extends Fragment {
     private final ArrayList<NotesEntity> noteList = new ArrayList<>();
     private Button buttonCreateNote;
-    /*
-        private final NotesEntity dossier1 = new NotesEntity("юбилей", "мама", "15.03");
-        private final NotesEntity dossier2 = new NotesEntity("ДР", "пап", "17.04");
-        private final NotesEntity dossier3 = new NotesEntity("годовщина", "брат", "21.03");
-        private final NotesEntity dossier4 = new NotesEntity("юбилей", "доча", "6.08");
-        private final NotesEntity dossier5 = new NotesEntity("ДР", "мурзик", "2.08");
-    */
+
     private LinearLayout listLinearLayout;
-
-   /* private void addNotesToList(NotesEntity notesEntity) {
-        Button button = new Button(getContext());
-        button.setText(notesEntity.toString());
-        button.setOnClickListener(v -> {
-            //при нажатии на кнопку контроллер должен открыть кнопку
-            //и передать в кнопку досье
-            ((Contract) getActivity()).createNewNote(notesEntity);
-        });
-
-        listLinearLayout.addView(button);
-    }); */
 
     @Override
     public void onAttach(Context context) {
@@ -65,17 +48,44 @@ public class NotesListFragment extends Fragment {
         });
     }
 
-    public void addNote(NotesEntity note) {
-        //добавляем в массив заметок новую заметку
-        noteList.add(note);
+    public void addNote(NotesEntity newNote) {
+        //при редактировании заметки проверяем новая это заметка или старая
+        NotesEntity sameNote = findNoteWithId(newNote.id);
+        //если такая заметка есть, то удаляем ее
+        if (sameNote != null) {
+            noteList.remove(sameNote);
+        }
+
+        // и добавляем новую заметку
+        noteList.add(newNote);
         renderList(noteList);
     }
 
+    //если находим совпадающие id, то возвращаем их в заметку
+    @Nullable
+    private NotesEntity findNoteWithId(String id) {
+        for (NotesEntity note : noteList) {
+            if (note.id.equals(id)) {
+                return note;
+            }
+        }
+        return null;
+    }
+
+    //при добавлении новой заметки
+    //добавляется кнопка с названием заметки в список
     private void renderList(List<NotesEntity> notes) {
         listLinearLayout.removeAllViews();
         for (NotesEntity note : notes) {
             Button button = new Button(getContext());
             button.setText(note.title);
+
+            //когда нажимаем заметку в списке
+            // она будет открываться
+            button.setOnClickListener(v -> {
+                getContract().editNote(note);
+            });
+
             listLinearLayout.addView(button);
         }
     }
@@ -85,9 +95,12 @@ public class NotesListFragment extends Fragment {
     }
 
     //с пом. этого интерфейса
-    //контракт создаст новую заметку
+    //можно создать новую заметку и отредактировать старые
     // (фрагмент ничего не должен знать об активити и других фрагментах)
     interface Contract {
         void createNewNote();
+
+        //когда мы нажимаем на заметку в списке, то можем ее отредактировать
+        void editNote(NotesEntity note);
     }
 }
