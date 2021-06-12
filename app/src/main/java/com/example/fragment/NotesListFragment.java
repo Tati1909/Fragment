@@ -10,16 +10,20 @@ import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NotesListFragment extends Fragment {
-
-    private final NotesEntity dossier1 = new NotesEntity("юбилей", "мама", "15.03");
-    private final NotesEntity dossier2 = new NotesEntity("ДР", "пап", "17.04");
-    private final NotesEntity dossier3 = new NotesEntity("годовщина", "брат", "21.03");
-    private final NotesEntity dossier4 = new NotesEntity("юбилей", "доча", "6.08");
-    private final NotesEntity dossier5 = new NotesEntity("ДР", "мурзик", "2.08");
-
-    private LinearLayout listLinearLayout;
+    private final ArrayList<NotesEntity> noteList = new ArrayList<>();
     private Button buttonCreateNote;
+    /*
+        private final NotesEntity dossier1 = new NotesEntity("юбилей", "мама", "15.03");
+        private final NotesEntity dossier2 = new NotesEntity("ДР", "пап", "17.04");
+        private final NotesEntity dossier3 = new NotesEntity("годовщина", "брат", "21.03");
+        private final NotesEntity dossier4 = new NotesEntity("юбилей", "доча", "6.08");
+        private final NotesEntity dossier5 = new NotesEntity("ДР", "мурзик", "2.08");
+    */
+    private LinearLayout listLinearLayout;
 
    /* private void addNotesToList(NotesEntity notesEntity) {
         Button button = new Button(getContext());
@@ -33,6 +37,15 @@ public class NotesListFragment extends Fragment {
         listLinearLayout.addView(button);
     }); */
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        //делаем проверку, что активити имплементирует интерфейс Contract
+        if (!(context instanceof Contract)) {
+            throw new RuntimeException("Activity must implement NotesListController");
+        }
+    }
+
     //метод для инициализации наших вьюшек
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,27 +56,28 @@ public class NotesListFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        //делаем проверку, что активити имплементирует интерфейс Contract
-        if (!(context instanceof Contract)) {
-            throw new RuntimeException("Activity must implement NotesListController");
-        }
-    }
-
     //этот метод для обработки кнопок и другой работы
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        renderList(noteList);
         buttonCreateNote.setOnClickListener(v -> {
             getContract().createNewNote();
         });
-/*
-        addNotesToList(dossier1);
-        addNotesToList(dossier2);
-        addNotesToList(dossier3);
-        addNotesToList(dossier4);
-        addNotesToList(dossier5); */
+    }
+
+    public void addNote(NotesEntity note) {
+        //добавляем в массив заметок новую заметку
+        noteList.add(note);
+        renderList(noteList);
+    }
+
+    private void renderList(List<NotesEntity> notes) {
+        listLinearLayout.removeAllViews();
+        for (NotesEntity note : notes) {
+            Button button = new Button(getContext());
+            button.setText(note.title);
+            listLinearLayout.addView(button);
+        }
     }
 
     private Contract getContract() {
@@ -71,7 +85,7 @@ public class NotesListFragment extends Fragment {
     }
 
     //с пом. этого интерфейса
-    //контроллер создаст новую заметку
+    //контракт создаст новую заметку
     // (фрагмент ничего не должен знать об активити и других фрагментах)
     interface Contract {
         void createNewNote();

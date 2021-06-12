@@ -15,16 +15,15 @@ public class EditNoteFragment extends Fragment {
     public static final String DOSSIER_ARGS_KEY = "DOSSIER_ARGS_KEY";
 
     private NotesEntity dossier = null;
+    private EditText titleN;
+    private EditText descriptionN;
+    private EditText dateN;
+    private Button saveButton;
 
     //конструктор должен быть без аргуметов, т к программа упадет после поворота экрана
     public EditNoteFragment() {
 
     }
-
-    private EditText titleN;
-    private EditText descriptionN;
-    private EditText dateN;
-    private Button saveButton;
 
     //статический метод, который возвращает NotesFragment
     //при его помощи мы будем передавать(ложить) данные во фрагмент
@@ -43,7 +42,7 @@ public class EditNoteFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (!(context instanceof Controller)) {
+        if (!(context instanceof Contract)) {
             throw new RuntimeException("Activity must implement NotesController");
         }
         //не забываем проверять на null
@@ -52,27 +51,16 @@ public class EditNoteFragment extends Fragment {
         }
     }
 
-    //вьюшка создалась и раздулась
+    //вьюшка создалась и раздулась, здесь мы инициализируем наши вьюшки
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_notes_detail, null);
-        //в root контейнер не ложим!! оставляем null
+        View view = inflater.inflate(R.layout.fragment_notes_detail, container, false);
 
         //инициализация вьюшек EditText для передачи во фрагмент при нажатии на кнопку
         titleN = view.findViewById(R.id.note_title);
         descriptionN = view.findViewById(R.id.note_description);
         dateN = view.findViewById(R.id.date_of_creation);
-
         saveButton = view.findViewById(R.id.save_button);
-
-        saveButton.setOnClickListener(v -> {
-            Controller controller = (Controller) getActivity();
-            controller.saveResult(new NotesEntity(
-                    titleN.getText().toString(),
-                    descriptionN.getText().toString(),
-                    dateN.getText().toString()
-            ));
-        });
 
         return view;
     }
@@ -81,15 +69,32 @@ public class EditNoteFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        //передаем данные заметок во фрагмент
+        saveButton.setOnClickListener(v -> {
+            getContract().saveNote(gatherNote());
+        });
+
+        /* //передаем данные заметок во фрагмент
         titleN.setText(dossier.title);
         descriptionN.setText(dossier.description);
-        dateN.setText(dossier.date);
+        dateN.setText(dossier.date);  */
     }
 
-    public interface Controller {
+    private NotesEntity gatherNote() {
+
+        return new NotesEntity(
+                titleN.getText().toString(),
+                descriptionN.getText().toString(),
+                NotesEntity.getCurrentDate()
+        );
+    }
+
+    private Contract getContract() {
+        return (Contract) getActivity();
+    }
+
+    interface Contract {
         //с помощью этого интерфейса будем предавать данные из
         //фрагмента в майнактивити
-        void saveResult(NotesEntity dossier);
+        void saveNote(NotesEntity note);
     }
 }

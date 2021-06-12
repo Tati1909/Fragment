@@ -10,7 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class MainActivity extends AppCompatActivity implements EditNoteFragment.Controller, NotesListFragment.Contract {
+public class MainActivity extends AppCompatActivity implements EditNoteFragment.Contract, NotesListFragment.Contract {
+    private static final String NOTES_LIST_FRAGMENT_TAG = "NOTES_LIST_FRAGMENT_TAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
     private void showNotesListFragment() {
         getSupportFragmentManager().
                 beginTransaction().
-                add(R.id.container, new NotesListFragment()).
+                add(R.id.container, new NotesListFragment(), NOTES_LIST_FRAGMENT_TAG).
                 commit();
     }
 
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
         getSupportFragmentManager().
                 beginTransaction().
                 addToBackStack(null).
-                add(R.id.container, new EditNoteFragment()).
+                replace(R.id.container, new EditNoteFragment()).
                 commit();
     }
 
@@ -79,8 +80,10 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
     //метод интерфйса для передачи данных
     //из фрагмента в resultTextView (майнактивити)
     @Override
-    public void saveResult(NotesEntity dossier) {
-        //todo
+    public void saveNote(NotesEntity note) {
+        getSupportFragmentManager().popBackStack();
+        NotesListFragment notesListFragment = (NotesListFragment) getSupportFragmentManager().findFragmentByTag(NOTES_LIST_FRAGMENT_TAG);
+        notesListFragment.addNote(note);
     }
 
     //метод интерфейса должен создать новую детальную заметку
