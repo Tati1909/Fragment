@@ -17,7 +17,6 @@ import java.util.List;
 public class NotesListFragment extends Fragment {
     private final ArrayList<NotesEntity> noteList = new ArrayList<>();
     private Button buttonCreateNote;
-
     private LinearLayout listLinearLayout;
 
     @Override

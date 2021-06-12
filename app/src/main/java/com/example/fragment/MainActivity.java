@@ -1,6 +1,7 @@
 package com.example.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,10 +40,13 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
 
     //Nullable может быть нулем
     private void showEditNoteFragment(@Nullable NotesEntity note) {
+        //если ориентация горизонтальная(boolean),то досье будем ложить в detail_container_land
+        boolean isLandScape = getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE;
         getSupportFragmentManager().
                 beginTransaction().
                 addToBackStack(null).
-                add(R.id.container, EditNoteFragment.newInstance(note)).
+                replace(isLandScape ? R.id.detail_container_land : R.id.container, EditNoteFragment.newInstance(note)).
                 commit();
     }
 
@@ -97,19 +101,6 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
     @Override
     public void createNewNote() {
         showEditNoteFragment();
-        /*
-        //если ориентация горизонтальная(boolean),то досье будем ложить в detail_container_land
-        boolean isLandScape = getResources().getConfiguration().orientation ==
-                Configuration.ORIENTATION_LANDSCAPE;
-        getSupportFragmentManager().
-                beginTransaction().
-                //при нажатии назад, приложение переходит на первый фрагмент
-                        addToBackStack(null).
-                //replace вместо add, чтобы фрагменты не накладывались друг на друга
-                        replace(isLandScape ? R.id.detail_container_land : R.id.container,
-                        EditNoteFragment.newInstance(dossier)).
-                commit();
-*/
     }
 
     //метод интерфейса
