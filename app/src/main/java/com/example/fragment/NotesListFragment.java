@@ -44,6 +44,7 @@ public class NotesListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         adapter = new NotesAdapter();
+        adapter.setOnItemClickListener(getContract()::editNote);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         renderList(noteList);
@@ -63,7 +64,7 @@ public class NotesListFragment extends Fragment {
 
         // и добавляем новую заметку
         noteList.add(newNote);
-        // renderList(noteList);
+        renderList(noteList);
     }
 
     //если находим совпадающие id, то возвращаем их в заметку

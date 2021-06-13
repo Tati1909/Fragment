@@ -1,7 +1,5 @@
 package com.example.fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -13,6 +11,20 @@ import java.util.List;
 public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
 
     private List<NotesEntity> data = new ArrayList<>();
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    //создание вьюшки
+    //ViewHolder хранит ссылки на каждый элемент списка
+    // (как во фрагментах мы искали заметки по Id)
+    @NonNull
+    @Override
+    public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new NoteViewHolder(parent, onItemClickListener);
+    }
 
     //Алаптер принимает на вход массив заметок
     public void setData(List<NotesEntity> notes) {
@@ -22,14 +34,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
         notifyDataSetChanged();
     }
 
-    //создание вьюшки
-    //ViewHolder хранит ссылки на каждый элемент списка
-    // (как во фрагментах мы искали заметки по Id)
-    @NonNull
-    @Override
-    public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false);
-        return new NoteViewHolder(view);
+    interface OnItemClickListener {
+        void onItemClick(NotesEntity note);
     }
 
     //в нашу вьюшку мы кладем значения
