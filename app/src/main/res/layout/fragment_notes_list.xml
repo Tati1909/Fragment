@@ -4,12 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
-    android:orientation="vertical"
+    android:background="#F6F2F2"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:id="@+id/list_linear_layout"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -22,12 +21,10 @@
         android:id="@+id/create_a_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/color_button_new_a_note"
-        android:padding="@dimen/padding_default"
+        android:layout_margin="@dimen/padding_default"
         android:text="@string/new_note"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/list_linear_layout" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

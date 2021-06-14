@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
     //из фрагмента в resultTextView (майнактивити)
     @Override
     public void saveNote(NotesEntity note) {
+        //setTitle(R.string.app_name);
         getSupportFragmentManager().popBackStack();
         NotesListFragment notesListFragment = (NotesListFragment) getSupportFragmentManager().findFragmentByTag(NOTES_LIST_FRAGMENT_TAG);
         notesListFragment.addNote(note);

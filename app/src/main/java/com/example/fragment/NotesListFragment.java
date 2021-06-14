@@ -6,10 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,8 @@ import java.util.List;
 public class NotesListFragment extends Fragment {
     private final ArrayList<NotesEntity> noteList = new ArrayList<>();
     private Button buttonCreateNote;
-    private LinearLayout listLinearLayout;
+    private RecyclerView recyclerView;
+    private NotesAdapter adapter;
 
     @Override
     public void onAttach(Context context) {
@@ -34,14 +36,19 @@ public class NotesListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
         //кнопка создания новой заметки
         buttonCreateNote = view.findViewById(R.id.create_a_note);
-        listLinearLayout = view.findViewById(R.id.list_linear_layout);
+        recyclerView = view.findViewById(R.id.list_recycler_view);
         return view;
     }
 
     //этот метод для обработки кнопок и другой работы
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        adapter = new NotesAdapter();
+        adapter.setOnItemClickListener(getContract()::editNote);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
         renderList(noteList);
+
         buttonCreateNote.setOnClickListener(v -> {
             getContract().createNewNote();
         });
@@ -74,19 +81,7 @@ public class NotesListFragment extends Fragment {
     //при добавлении новой заметки
     //добавляется кнопка с названием заметки в список
     private void renderList(List<NotesEntity> notes) {
-        listLinearLayout.removeAllViews();
-        for (NotesEntity note : notes) {
-            Button button = new Button(getContext());
-            button.setText(note.title);
-
-            //когда нажимаем заметку в списке
-            // она будет открываться
-            button.setOnClickListener(v -> {
-                getContract().editNote(note);
-            });
-
-            listLinearLayout.addView(button);
-        }
+        adapter.setData(notes);
     }
 
     private Contract getContract() {
