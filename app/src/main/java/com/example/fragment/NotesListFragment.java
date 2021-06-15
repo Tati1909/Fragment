@@ -1,5 +1,6 @@
 package com.example.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,12 +33,20 @@ public class NotesListFragment extends Fragment {
     }
 
     //метод для инициализации наших вьюшек
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
         //кнопка создания новой заметки
         buttonCreateNote = view.findViewById(R.id.create_a_note);
         recyclerView = view.findViewById(R.id.list_recycler_view);
+
+        // Добавим разделитель карточек (декоратор) к нашему списку
+        DividerItemDecoration itemDecoration = new
+                DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL);
+        itemDecoration.setDrawable(getResources().getDrawable(R.drawable.separator, null));
+        recyclerView.addItemDecoration(itemDecoration);
+
         return view;
     }
 
@@ -82,6 +92,15 @@ public class NotesListFragment extends Fragment {
     //добавляется кнопка с названием заметки в список
     private void renderList(List<NotesEntity> notes) {
         adapter.setData(notes);
+    }
+
+    void deleteNote(String id) {
+        for (NotesEntity note : noteList) {
+            if (note.getId().equals(id)) {
+                noteList.remove(note);
+                break;
+            }
+        }
     }
 
     private Contract getContract() {
