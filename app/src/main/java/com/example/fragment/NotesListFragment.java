@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class NotesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
         //кнопка создания новой заметки
-        buttonCreateNote = view.findViewById(R.id.create_a_note);
+        buttonCreateNote = view.findViewById(R.id.create_a_note_button);
         recyclerView = view.findViewById(R.id.list_recycler_view);
 
         // Добавим разделитель карточек (декоратор) к нашему списку
@@ -55,7 +56,10 @@ public class NotesListFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         adapter = new NotesAdapter();
         adapter.setOnItemClickListener(getContract()::editNote);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //объявляем layoutManager как StaggeredGridLayoutManager с 2 столбцами(плитка)
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         renderList(noteList);
 
@@ -89,11 +93,12 @@ public class NotesListFragment extends Fragment {
     }
 
     //при добавлении новой заметки
-    //добавляется кнопка с названием заметки в список
+    //добавляется элемент списка с названием заметки и кратким описанием
     private void renderList(List<NotesEntity> notes) {
         adapter.setData(notes);
     }
 
+    //этот метод нужно как-то связать с удалением заметки при долгом нажатии
     void deleteNote(String id) {
         for (NotesEntity note : noteList) {
             if (note.getId().equals(id)) {

@@ -1,8 +1,10 @@
 package com.example.fragment;
 
+import android.os.Build;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
     }
 
     //в нашу вьюшку мы кладем значения
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         //кладем данные
