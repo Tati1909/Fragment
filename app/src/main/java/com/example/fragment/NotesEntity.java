@@ -12,6 +12,14 @@ public class NotesEntity implements Parcelable {
     public final String description;
     public final long creationDate;
 
+    public String getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
     public static final Creator<NotesEntity> CREATOR = new Creator<NotesEntity>() {
         @Override
         public NotesEntity createFromParcel(Parcel in) {
@@ -59,6 +67,7 @@ public class NotesEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeString(title);
         dest.writeString(description);
         dest.writeLong(creationDate);
