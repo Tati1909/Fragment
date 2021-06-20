@@ -12,21 +12,28 @@ public class NotesEntity implements Parcelable {
     public String description;
     public long creationDate;
 
-    public String getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
     //заводим конструктор по умолчанию для FireStore
     public NotesEntity() {
 
     }
 
+    public NotesEntity(String id, String title, String description) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.creationDate = Calendar.getInstance().getTimeInMillis();
+    }
+
+    public String getId() {
+        return id;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public static final Creator<NotesEntity> CREATOR = new Creator<NotesEntity>() {
@@ -40,13 +47,6 @@ public class NotesEntity implements Parcelable {
             return new NotesEntity[size];
         }
     };
-
-    public NotesEntity(String id, String title, String description, long creationDate) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.creationDate = creationDate;
-    }
 
     public long getCreationDate() {
         return creationDate;

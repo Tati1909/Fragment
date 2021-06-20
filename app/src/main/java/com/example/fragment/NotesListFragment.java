@@ -48,7 +48,6 @@ public class NotesListFragment extends Fragment {
         itemDecoration.setDrawable(getResources().getDrawable(R.drawable.separator, null));
         recyclerView.addItemDecoration(itemDecoration);
 
-
         return view;
     }
 
@@ -63,7 +62,6 @@ public class NotesListFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        FirebaseNotesRepo repo = new FirebaseNotesRepo();
 
         renderList(noteList);
 

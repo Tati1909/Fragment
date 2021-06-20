@@ -87,8 +87,8 @@ public class EditNoteFragment extends Fragment {
         return new NotesEntity(
                 note == null ? NotesEntity.generateNewId() : note.id,
                 title.getText().toString(),
-                description.getText().toString(),
-                note == null ? NotesEntity.getCurrentDate() : note.creationDate
+                description.getText().toString()
+                // note == null ? NotesEntity.getCurrentDate() : note.creationDate
         );
     }
 
