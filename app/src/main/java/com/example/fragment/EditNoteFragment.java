@@ -98,7 +98,7 @@ public class EditNoteFragment extends Fragment {
 
     interface Contract {
         //с помощью этого интерфейса будем предавать данные из
-        //фрагмента в майнактивити
+        //2 фрагмента в 1 фрагмент
         void saveNote(NotesEntity note);
     }
 }

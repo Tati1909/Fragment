@@ -7,10 +7,10 @@ import java.util.Calendar;
 import java.util.UUID;
 
 public class NotesEntity implements Parcelable {
-    public final String id;
-    public final String title;
-    public final String description;
-    public final long creationDate;
+    public String id;
+    public String title;
+    public String description;
+    public long creationDate;
 
     public String getId() {
         return id;
@@ -18,6 +18,15 @@ public class NotesEntity implements Parcelable {
 
     public String getTitle() {
         return title;
+    }
+
+    //заводим конструктор по умолчанию для FireStore
+    public NotesEntity() {
+
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public static final Creator<NotesEntity> CREATOR = new Creator<NotesEntity>() {
@@ -37,6 +46,10 @@ public class NotesEntity implements Parcelable {
         this.title = title;
         this.description = description;
         this.creationDate = creationDate;
+    }
+
+    public long getCreationDate() {
+        return creationDate;
     }
 
     protected NotesEntity(Parcel in) {

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotesListFragment extends Fragment {
-    private final ArrayList<NotesEntity> noteList = new ArrayList<>();
+    private final List<NotesEntity> noteList = new ArrayList<>();
     private Button buttonCreateNote;
     private RecyclerView recyclerView;
     private NotesAdapter adapter;
@@ -48,6 +48,7 @@ public class NotesListFragment extends Fragment {
         itemDecoration.setDrawable(getResources().getDrawable(R.drawable.separator, null));
         recyclerView.addItemDecoration(itemDecoration);
 
+
         return view;
     }
 
@@ -61,6 +62,9 @@ public class NotesListFragment extends Fragment {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        FirebaseNotesRepo repo = new FirebaseNotesRepo();
+
         renderList(noteList);
 
         buttonCreateNote.setOnClickListener(v -> {
@@ -78,6 +82,8 @@ public class NotesListFragment extends Fragment {
 
         // и добавляем новую заметку
         noteList.add(newNote);
+        //отправляем заметку в FireStore
+        FirebaseNotesRepo.sendNote(newNote);
         renderList(noteList);
     }
 
