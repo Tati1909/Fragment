@@ -16,13 +16,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 public class NotesListFragment extends Fragment {
     private final List<NotesEntity> noteList = new ArrayList<>();
     private Button buttonCreateNote;
     private RecyclerView recyclerView;
     private NotesAdapter adapter;
+    private final String uid = UUID.randomUUID().toString();
+    private FirebaseNotesRepo repo;
+    private final Runnable subscriber = () -> {
+        updateAllNotes(noteList);
+    };
 
     @Override
     public void onAttach(Context context) {
@@ -62,17 +70,20 @@ public class NotesListFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
+        repo = new FirebaseNotesRepo();
 
-        renderList(noteList);
+        updateAllNotes(noteList);
 
         buttonCreateNote.setOnClickListener(v -> {
             getContract().createNewNote();
         });
+
+        repo.subscribe(subscriber);
     }
 
     public void addNote(NotesEntity newNote) {
         //при редактировании заметки проверяем новая это заметка или старая
-        NotesEntity sameNote = findNoteWithId(newNote.id);
+        NotesEntity sameNote = findNoteWithId(newNote.uid);
         //если такая заметка есть, то удаляем ее
         if (sameNote != null) {
             noteList.remove(sameNote);
@@ -82,14 +93,14 @@ public class NotesListFragment extends Fragment {
         noteList.add(newNote);
         //отправляем заметку в FireStore
         FirebaseNotesRepo.sendNote(newNote);
-        renderList(noteList);
+        updateAllNotes(noteList);
     }
 
     //если находим совпадающие id, то возвращаем их в заметку
     @Nullable
     private NotesEntity findNoteWithId(String id) {
         for (NotesEntity note : noteList) {
-            if (note.id.equals(id)) {
+            if (note.uid.equals(id)) {
                 return note;
             }
         }
@@ -98,14 +109,23 @@ public class NotesListFragment extends Fragment {
 
     //при добавлении новой заметки
     //добавляется элемент списка с названием заметки и кратким описанием
-    private void renderList(List<NotesEntity> notes) {
-        adapter.setData(notes);
+    private void updateAllNotes(List<NotesEntity> notes) {
+        adapter.setData(notes, uid);
+        List<NotesEntity> sortedNotes = repo.getNotes();
+        Collections.sort(sortedNotes, new Comparator<NotesEntity>() {
+            @Override
+            public int compare(NotesEntity o1, NotesEntity o2) {
+                return o1.getCreationDate() > o2.getCreationDate() ? 1 : -1;
+            }
+        });
+        adapter.setData(sortedNotes, uid);
+        adapter.notifyDataSetChanged();
     }
 
     //этот метод нужно как-то связать с удалением заметки при долгом нажатии
     void deleteNote(String id) {
         for (NotesEntity note : noteList) {
-            if (note.getId().equals(id)) {
+            if (note.getUid().equals(id)) {
                 noteList.remove(note);
                 break;
             }

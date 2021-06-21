@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.UUID;
 
 public class NotesEntity implements Parcelable {
-    public String id;
+    public String uid;
     public String title;
     public String description;
     public long creationDate;
@@ -17,15 +17,18 @@ public class NotesEntity implements Parcelable {
 
     }
 
-    public NotesEntity(String id, String title, String description) {
-        this.id = id;
+    public NotesEntity(String uid, String title, String description) {
+        this.uid = uid;
         this.title = title;
         this.description = description;
         this.creationDate = Calendar.getInstance().getTimeInMillis();
     }
 
-    public String getId() {
-        return id;
+    protected NotesEntity(Parcel in) {
+        uid = in.readString();
+        title = in.readString();
+        description = in.readString();
+        creationDate = in.readLong();
     }
 
     public String getDescription() {
@@ -34,6 +37,10 @@ public class NotesEntity implements Parcelable {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getUid() {
+        return uid;
     }
 
     public static final Creator<NotesEntity> CREATOR = new Creator<NotesEntity>() {
@@ -50,13 +57,6 @@ public class NotesEntity implements Parcelable {
 
     public long getCreationDate() {
         return creationDate;
-    }
-
-    protected NotesEntity(Parcel in) {
-        id = in.readString();
-        title = in.readString();
-        description = in.readString();
-        creationDate = in.readLong();
     }
 
     public static String generateNewId() {
@@ -80,7 +80,7 @@ public class NotesEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
+        dest.writeString(uid);
         dest.writeString(title);
         dest.writeString(description);
         dest.writeLong(creationDate);

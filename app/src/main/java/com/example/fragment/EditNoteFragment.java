@@ -85,7 +85,7 @@ public class EditNoteFragment extends Fragment {
     //то оставляем id и старую дату создания заметки
     private NotesEntity gatherNote() {
         return new NotesEntity(
-                note == null ? NotesEntity.generateNewId() : note.id,
+                note == null ? NotesEntity.generateNewId() : note.uid,
                 title.getText().toString(),
                 description.getText().toString()
                 // note == null ? NotesEntity.getCurrentDate() : note.creationDate

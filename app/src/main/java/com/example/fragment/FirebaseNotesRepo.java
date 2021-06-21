@@ -45,7 +45,7 @@ public class FirebaseNotesRepo {
     }
 
     //получаем обновленный кэш
-    static List<NotesEntity> getNotes() {
+    List<NotesEntity> getNotes() {
         return cache;
     }
 
