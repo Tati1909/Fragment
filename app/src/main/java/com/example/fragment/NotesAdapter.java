@@ -14,6 +14,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
 
     private List<NotesEntity> data = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
+    private String uid;
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
@@ -29,8 +30,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
     }
 
     //Алаптер принимает на вход массив заметок
-    public void setData(List<NotesEntity> notes) {
+    public void setData(List<NotesEntity> notes, String uid) {
         data = notes;
+        this.uid = uid;
         //c спомощью этого метода адаптер уведомляет сам себя,
         //что его данные изменились
         notifyDataSetChanged();
@@ -45,7 +47,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         //кладем данные
-        holder.bind(data.get(position));
+        holder.bind(data.get(position), uid);
     }
 
     //получение количества элементов

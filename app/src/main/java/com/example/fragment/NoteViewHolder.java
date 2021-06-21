@@ -35,7 +35,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder implements MenuItem.
 
     //привязать/задать значения
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void bind(NotesEntity notesEntity) {
+    public void bind(NotesEntity notesEntity, String uid) {
         this.noteEntity = notesEntity;
 
         titleTextView.setText(notesEntity.title);

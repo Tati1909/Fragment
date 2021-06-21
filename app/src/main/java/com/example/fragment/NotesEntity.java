@@ -7,17 +7,40 @@ import java.util.Calendar;
 import java.util.UUID;
 
 public class NotesEntity implements Parcelable {
-    public final String id;
-    public final String title;
-    public final String description;
-    public final long creationDate;
+    public String uid;
+    public String title;
+    public String description;
+    public long creationDate;
 
-    public String getId() {
-        return id;
+    //заводим конструктор по умолчанию для FireStore
+    public NotesEntity() {
+
+    }
+
+    public NotesEntity(String uid, String title, String description) {
+        this.uid = uid;
+        this.title = title;
+        this.description = description;
+        this.creationDate = Calendar.getInstance().getTimeInMillis();
+    }
+
+    protected NotesEntity(Parcel in) {
+        uid = in.readString();
+        title = in.readString();
+        description = in.readString();
+        creationDate = in.readLong();
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public String getUid() {
+        return uid;
     }
 
     public static final Creator<NotesEntity> CREATOR = new Creator<NotesEntity>() {
@@ -32,18 +55,8 @@ public class NotesEntity implements Parcelable {
         }
     };
 
-    public NotesEntity(String id, String title, String description, long creationDate) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.creationDate = creationDate;
-    }
-
-    protected NotesEntity(Parcel in) {
-        id = in.readString();
-        title = in.readString();
-        description = in.readString();
-        creationDate = in.readLong();
+    public long getCreationDate() {
+        return creationDate;
     }
 
     public static String generateNewId() {
@@ -67,7 +80,7 @@ public class NotesEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
+        dest.writeString(uid);
         dest.writeString(title);
         dest.writeString(description);
         dest.writeLong(creationDate);

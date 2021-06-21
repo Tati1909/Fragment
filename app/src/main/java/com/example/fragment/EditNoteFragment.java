@@ -85,10 +85,10 @@ public class EditNoteFragment extends Fragment {
     //то оставляем id и старую дату создания заметки
     private NotesEntity gatherNote() {
         return new NotesEntity(
-                note == null ? NotesEntity.generateNewId() : note.id,
+                note == null ? NotesEntity.generateNewId() : note.uid,
                 title.getText().toString(),
-                description.getText().toString(),
-                note == null ? NotesEntity.getCurrentDate() : note.creationDate
+                description.getText().toString()
+                // note == null ? NotesEntity.getCurrentDate() : note.creationDate
         );
     }
 
@@ -98,7 +98,7 @@ public class EditNoteFragment extends Fragment {
 
     interface Contract {
         //с помощью этого интерфейса будем предавать данные из
-        //фрагмента в майнактивити
+        //2 фрагмента в 1 фрагмент
         void saveNote(NotesEntity note);
     }
 }
