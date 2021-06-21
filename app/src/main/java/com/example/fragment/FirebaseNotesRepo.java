@@ -7,6 +7,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -21,6 +22,10 @@ public class FirebaseNotesRepo {
 
     public FirebaseNotesRepo() {
         db = FirebaseFirestore.getInstance();
+
+        //кэшируем заметки при отсутствии интернета(стоит вроде по умолчанию)
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder().setPersistenceEnabled(true).build();
+        db.setFirestoreSettings(settings);
 
         //здесь мы будем читать данные из FireStore
         //заполняем кэш

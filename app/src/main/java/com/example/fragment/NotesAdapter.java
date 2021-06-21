@@ -47,7 +47,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         //кладем данные
-        holder.bind(data.get(position));
+        holder.bind(data.get(position), uid);
     }
 
     //получение количества элементов
