@@ -1,5 +1,6 @@
 package com.example.fragment;
 
+import android.app.AlertDialog;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -59,8 +60,23 @@ public class NoteViewHolder extends RecyclerView.ViewHolder implements MenuItem.
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        Toast.makeText(itemView.getContext(), noteEntity.getTitle(), Toast.LENGTH_SHORT).show();
+        //вызываем AlertDialog
+        showAlertDialog();
         //здесь нужно удалить заметку
         return true;
+    }
+
+    private void showAlertDialog() {
+        new AlertDialog.Builder(itemView.getContext())
+                .setTitle("Внимание")
+                .setMessage("Вы действительно хотите удалить заметку?")
+                .setCancelable(false)
+                .setPositiveButton(R.string.yes, (d, i) -> {
+                    Toast.makeText(itemView.getContext(), R.string.yes, Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton(R.string.no, (d, i) -> {
+                    Toast.makeText(itemView.getContext(), R.string.no, Toast.LENGTH_SHORT).show();
+                })
+                .show();
     }
 }

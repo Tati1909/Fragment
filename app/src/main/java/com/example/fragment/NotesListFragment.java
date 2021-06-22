@@ -23,10 +23,10 @@ import java.util.UUID;
 
 public class NotesListFragment extends Fragment {
     private final List<NotesEntity> noteList = new ArrayList<>();
+    private final String uid = UUID.randomUUID().toString();
     private Button buttonCreateNote;
     private RecyclerView recyclerView;
     private NotesAdapter adapter;
-    private final String uid = UUID.randomUUID().toString();
     private FirebaseNotesRepo repo;
     private final Runnable subscriber = () -> {
         updateAllNotes(noteList);
