@@ -1,5 +1,7 @@
 package com.example.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -59,8 +61,30 @@ public class NoteViewHolder extends RecyclerView.ViewHolder implements MenuItem.
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        Toast.makeText(itemView.getContext(), noteEntity.getTitle(), Toast.LENGTH_SHORT).show();
-        //здесь нужно удалить заметку
+        //вызываем AlertDialog с подтверждением удаления заметки
+        showAlertDialog();
         return true;
+    }
+
+    private void showAlertDialog() {
+        new AlertDialog.Builder(itemView.getContext())
+                .setTitle("Внимание")
+                .setMessage("Вы действительно хотите удалить заметку?")
+                .setCancelable(false)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // ((NotesListFragment.Contract) itemView.getContext()).deleteNote(noteEntity);
+                        Toast.makeText(itemView.getContext(), "Заметка удалена", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(itemView.getContext(), "Заметка сохранена", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setIcon(R.drawable.ic_alert_delete)
+                .show();
     }
 }

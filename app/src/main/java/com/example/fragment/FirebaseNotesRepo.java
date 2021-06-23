@@ -49,6 +49,11 @@ public class FirebaseNotesRepo {
         (FirebaseFirestore.getInstance()).collection(NOTES_TABLE_TITLE).add(note);
     }
 
+    //удаляем заметку в FireStore
+    public static void deleteNoteInFirestore(NotesEntity note) {
+        (FirebaseFirestore.getInstance()).collection(NOTES_TABLE_TITLE).document(note.uid).delete();
+    }
+
     //получаем обновленный кэш
     List<NotesEntity> getNotes() {
         return cache;

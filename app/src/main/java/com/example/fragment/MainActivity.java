@@ -50,17 +50,6 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
                 commit();
     }
 
-
-   /* private void showPopup() {
-        PopupMenu popupMenu = new PopupMenu(this, buttonCreateNote);
-        popupMenu.inflate(R.menu.main_menu);
-        popupMenu.setOnMenuItemClickListener(menuItem -> {
-            onOptionsItemSelected(menuItem);
-            return false;
-        });
-        popupMenu.show();
-    } */
-
     //определяем верхнее меню приложения
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
     //из фрагмента в resultTextView (майнактивити)
     @Override
     public void saveNote(NotesEntity note) {
-        //setTitle(R.string.app_name);
         getSupportFragmentManager().popBackStack();
         NotesListFragment notesListFragment = (NotesListFragment) getSupportFragmentManager().findFragmentByTag(NOTES_LIST_FRAGMENT_TAG);
         notesListFragment.addNote(note);
@@ -110,5 +98,14 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
     public void editNote(NotesEntity note) {
         showEditNoteFragment(note);
 
+    }
+
+    @Override
+    public void deleteNote(NotesEntity note) {
+        NotesListFragment notesListFragment = (NotesListFragment) getSupportFragmentManager()
+                .findFragmentByTag(NOTES_LIST_FRAGMENT_TAG);
+        if (notesListFragment != null) {
+            notesListFragment.deleteNote(note);
+        }
     }
 }
