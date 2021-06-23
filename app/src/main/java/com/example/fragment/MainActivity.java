@@ -99,4 +99,13 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
         showEditNoteFragment(note);
 
     }
+
+    @Override
+    public void deleteNote(NotesEntity note) {
+        NotesListFragment notesListFragment = (NotesListFragment) getSupportFragmentManager()
+                .findFragmentByTag(NOTES_LIST_FRAGMENT_TAG);
+        if (notesListFragment != null) {
+            notesListFragment.deleteNote(note);
+        }
+    }
 }

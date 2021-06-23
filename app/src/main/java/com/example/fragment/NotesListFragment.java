@@ -65,7 +65,7 @@ public class NotesListFragment extends Fragment {
         adapter = new NotesAdapter();
         adapter.setOnItemClickListener(getContract()::editNote);
 
-        //объявляем layoutManager как StaggeredGridLayoutManager с 2 столбцами(плитка)
+        //для списка объявляем layoutManager как StaggeredGridLayoutManager с 2 столбцами(плитка)
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -87,6 +87,7 @@ public class NotesListFragment extends Fragment {
         //если такая заметка есть, то удаляем ее
         if (sameNote != null) {
             noteList.remove(sameNote);
+            //и нужно удалить ее в базе
         }
 
         // и добавляем новую заметку
@@ -122,11 +123,13 @@ public class NotesListFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    //этот метод нужно как-то связать с удалением заметки при долгом нажатии
-    void deleteNote(String id) {
+    //этот метод вызываем в холдере
+    void deleteNote(NotesEntity noteEntity) {
         for (NotesEntity note : noteList) {
-            if (note.getUid().equals(id)) {
+            if (noteEntity.getUid().equals(note.uid)) {
                 noteList.remove(note);
+                FirebaseNotesRepo.deleteNoteInFirestore(note);
+                updateAllNotes(noteList);
                 break;
             }
         }
@@ -144,5 +147,7 @@ public class NotesListFragment extends Fragment {
 
         //когда мы нажимаем на заметку в списке, то можем ее отредактировать
         void editNote(NotesEntity note);
+
+        void deleteNote(NotesEntity note);
     }
 }

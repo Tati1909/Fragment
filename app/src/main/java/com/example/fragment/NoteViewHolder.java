@@ -1,6 +1,7 @@
 package com.example.fragment;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -60,9 +61,8 @@ public class NoteViewHolder extends RecyclerView.ViewHolder implements MenuItem.
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        //вызываем AlertDialog
+        //вызываем AlertDialog с подтверждением удаления заметки
         showAlertDialog();
-        //здесь нужно удалить заметку
         return true;
     }
 
@@ -71,12 +71,20 @@ public class NoteViewHolder extends RecyclerView.ViewHolder implements MenuItem.
                 .setTitle("Внимание")
                 .setMessage("Вы действительно хотите удалить заметку?")
                 .setCancelable(false)
-                .setPositiveButton(R.string.yes, (d, i) -> {
-                    Toast.makeText(itemView.getContext(), R.string.yes, Toast.LENGTH_SHORT).show();
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // ((NotesListFragment.Contract) itemView.getContext()).deleteNote(noteEntity);
+                        Toast.makeText(itemView.getContext(), "Заметка удалена", Toast.LENGTH_SHORT).show();
+                    }
                 })
-                .setNegativeButton(R.string.no, (d, i) -> {
-                    Toast.makeText(itemView.getContext(), R.string.no, Toast.LENGTH_SHORT).show();
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(itemView.getContext(), "Заметка сохранена", Toast.LENGTH_SHORT).show();
+                    }
                 })
+                .setIcon(R.drawable.ic_alert_delete)
                 .show();
     }
 }
