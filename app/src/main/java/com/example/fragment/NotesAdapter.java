@@ -14,10 +14,15 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
 
     private List<NotesEntity> data = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
+    private OnDeleteListener onDeleteListener;
     private String uid;
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    public void setOnItemDeleteListener(OnDeleteListener onItemDeleteClickListener) {
+        this.onDeleteListener = onItemDeleteClickListener;
     }
 
     //создание вьюшки
@@ -38,10 +43,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
         notifyDataSetChanged();
     }
 
-    interface OnItemClickListener {
-        void onItemClick(NotesEntity note);
-    }
-
     //в нашу вьюшку мы кладем значения
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -54,5 +55,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    interface OnItemClickListener {
+        void onItemClick(NotesEntity note);
+    }
+
+    //интерфейс для отработки кнопки удалить заметку
+    interface OnDeleteListener {
+        void deleteNote(NotesEntity note);
     }
 }

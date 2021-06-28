@@ -18,7 +18,7 @@ public class EditNoteFragment extends Fragment {
     @Nullable
     private NotesEntity note = null;
 
-    private EditText title;
+    private EditText titleEditText;
     private EditText description;
     private Button saveButton;
 
@@ -53,7 +53,7 @@ public class EditNoteFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_notes_detail, container, false);
 
         //инициализация вьюшек EditText для передачи во фрагмент при нажатии на кнопку
-        title = view.findViewById(R.id.note_title);
+        titleEditText = view.findViewById(R.id.note_title);
         description = view.findViewById(R.id.note_description);
         saveButton = view.findViewById(R.id.save_button);
 
@@ -76,7 +76,7 @@ public class EditNoteFragment extends Fragment {
     private void fillNote(NotesEntity note) {
         if (note == null) return;
         //передаем данные заметок во фрагмент
-        title.setText(note.title);
+        titleEditText.setText(note.title);
         description.setText(note.description);
 
     }
@@ -86,7 +86,7 @@ public class EditNoteFragment extends Fragment {
     private NotesEntity gatherNote() {
         return new NotesEntity(
                 note == null ? NotesEntity.generateNewId() : note.uid,
-                title.getText().toString(),
+                titleEditText.getText().toString(),
                 description.getText().toString()
                 // note == null ? NotesEntity.getCurrentDate() : note.creationDate
         );

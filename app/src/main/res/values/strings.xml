@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Fragment</string>
+    <string name="app_name">NotesApp</string>
     <string name="note_title">Название заметки</string>
     <string name="note_description">Описание заметки</string>
     <string name="date_of_creation">Дата создания</string>

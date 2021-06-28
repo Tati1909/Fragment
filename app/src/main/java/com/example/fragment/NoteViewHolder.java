@@ -2,7 +2,6 @@ package com.example.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,18 +11,18 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class NoteViewHolder extends RecyclerView.ViewHolder implements MenuItem.OnMenuItemClickListener {
+public class NoteViewHolder extends RecyclerView.ViewHolder implements MenuItem.OnMenuItemClickListener, NotesAdapter.OnDeleteListener {
 
     private final TextView titleTextView;
     private final TextView descriptionTextView;
     private final CardView cardView;
     private NotesEntity noteEntity;
 
-    public NoteViewHolder(@NonNull ViewGroup parent, @Nullable NotesAdapter.OnItemClickListener clickListener) {
+    public NoteViewHolder(@NonNull ViewGroup parent,
+                          @Nullable NotesAdapter.OnItemClickListener clickListener) {
         super(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false));
         cardView = (CardView) itemView;
         titleTextView = itemView.findViewById(R.id.subject_text_view);
@@ -36,7 +35,6 @@ public class NoteViewHolder extends RecyclerView.ViewHolder implements MenuItem.
     }
 
     //привязать/задать значения
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void bind(NotesEntity notesEntity, String uid) {
         this.noteEntity = notesEntity;
 
@@ -53,7 +51,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder implements MenuItem.
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                itemView.showContextMenu(10, 10);
+                itemView.showContextMenu();
                 return true;
             }
         });
@@ -66,6 +64,12 @@ public class NoteViewHolder extends RecyclerView.ViewHolder implements MenuItem.
         return true;
     }
 
+    @Override
+    public void deleteNote(NotesEntity note) {
+        this.noteEntity = note;
+        FirebaseNotesRepo.deleteNoteInFirestore(noteEntity);
+    }
+
     private void showAlertDialog() {
         new AlertDialog.Builder(itemView.getContext())
                 .setTitle("Внимание")
@@ -74,8 +78,8 @@ public class NoteViewHolder extends RecyclerView.ViewHolder implements MenuItem.
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // ((NotesListFragment.Contract) itemView.getContext()).deleteNote(noteEntity);
-                        Toast.makeText(itemView.getContext(), "Заметка удалена", Toast.LENGTH_SHORT).show();
+                        deleteNote(noteEntity);
+                        // Toast.makeText(itemView.getContext(), "Заметка удалена", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

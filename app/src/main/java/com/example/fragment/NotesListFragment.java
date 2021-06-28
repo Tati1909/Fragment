@@ -147,7 +147,5 @@ public class NotesListFragment extends Fragment {
 
         //когда мы нажимаем на заметку в списке, то можем ее отредактировать
         void editNote(NotesEntity note);
-
-        void deleteNote(NotesEntity note);
     }
 }

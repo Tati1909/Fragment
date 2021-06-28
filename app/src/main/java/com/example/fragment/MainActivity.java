@@ -66,11 +66,14 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
             case R.id.display_type:
                 Toast.makeText(this, "Плитка или список", Toast.LENGTH_LONG).show();
                 break;
-            case R.id.settings:
+            case R.id.action_settings:
                 Toast.makeText(this, "Настройки приложения", Toast.LENGTH_LONG).show();
                 break;
             case R.id.folders:
                 Toast.makeText(this, "Посмотреть все папки", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.navigation_home:
+                finish();
                 break;
         }
         return true;
@@ -98,14 +101,5 @@ public class MainActivity extends AppCompatActivity implements EditNoteFragment.
     public void editNote(NotesEntity note) {
         showEditNoteFragment(note);
 
-    }
-
-    @Override
-    public void deleteNote(NotesEntity note) {
-        NotesListFragment notesListFragment = (NotesListFragment) getSupportFragmentManager()
-                .findFragmentByTag(NOTES_LIST_FRAGMENT_TAG);
-        if (notesListFragment != null) {
-            notesListFragment.deleteNote(note);
-        }
     }
 }
