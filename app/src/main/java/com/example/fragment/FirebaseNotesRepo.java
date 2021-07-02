@@ -46,7 +46,7 @@ public class FirebaseNotesRepo {
 
     //отправляем заметки в FireStore
     public static void sendNote(NotesEntity note) {
-        (FirebaseFirestore.getInstance()).collection(NOTES_TABLE_TITLE).add(note);
+        FirebaseFirestore.getInstance().collection(NOTES_TABLE_TITLE).add(note);
     }
 
     //удаляем заметку в FireStore
